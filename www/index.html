@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en" ng-app="myApp">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>My App</title>  
+  
+  <link rel="stylesheet" href="lib/onsen/css/onsenui.css">  
+  <link rel="stylesheet" href="lib/onsen/css/topcoat-mobile-onsen-ios7.css"> 
+  <link rel="stylesheet" href="styles/app.css"/> 
+  <link rel="stylesheet" href="js/directives/myControls.css"/> 
+
+  <script type="text/javascript" src="cordova.js"></script> <!-- must have this -->
+  <script src="lib/onsen/js/angular/angular.js"></script>    
+  <script src="lib/onsen/js/angular/angular-touch.js"></script>    
+  <script src="lib/onsen/js/onsenui.js"></script>  
+  <script src="js/directives/iosControls.js"></script>  
+  <script src="js/directives/myControls.js"></script>  
+  <script src="js/app.js"></script> 
+  <script src="js/utils.js"></script> 
+  <script src="js/controllers/MenuController.js"></script> 
+  <script src="js/controllers/LoginController.js"></script>  
+  <script src="js/controllers/TripsController.js"></script> 
+  <script src="js/controllers/TripController.js"></script> 
+  <script src="js/controllers/MyTripsController.js"></script> 
+  <script src="js/controllers/TripInputController.js"></script> 
+  <script src="js/controllers/PlansController.js"></script> 
+  <script src="js/controllers/ActivitiesController.js"></script> 
+  <script src="js/controllers/JournalController.js"></script>   
+  <script src="js/controllers/JournalEntryController.js"></script>   
+  <script src="js/services/LoginService.js"></script> 
+  <script src="js/services/TripsService.js"></script> 
+  <script src="js/services/JournalService.js"></script> 
+  <script src="js/services/FoursquareService.js"></script> 
+    
+</head>
+
+<body>    
+  
+  <ons-screen>
+
+    <ons-sliding-menu 
+      behind-page="menu.html" 
+      above-page="home.html">
+    </ons-sliding-menu>
+    
+  </ons-screen>
+  
+</body>
+</html>

@@ -1,0 +1,28 @@
+.swipe-item {
+	position: relative;
+}
+
+.swipe-item-top, .swipe-item-bottom  {
+	position: relative;	
+}
+
+.swipe-item-top {		
+	background-color: green;
+	top: 0;
+	z-index: 1;
+	height: 100px;
+}
+
+.swipe-item-bottom {
+	position: absolute;
+	right: 0;
+	top: 0; /*height*/
+	display: table;
+	z-index: 0;
+}
+
+.swipe-item-menu {
+	display: table-cell;
+	vertical-align: middle;
+	padding: 0 5px 0 5px;
+}

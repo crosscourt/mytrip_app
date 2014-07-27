@@ -1,0 +1,31 @@
+<ons-page class="center" ng-controller="JournalEntryCtrl">
+    <ons-navigator-toolbar title="New Entry" right-button-icon="fa fa-lg fa-save"
+                           on-right-button-click="save()">
+    </ons-navigator-toolbar>
+	<div>
+		<!--<input type="datetime-local" value="1996-12-19T16:39:57"/>-->
+		<div>
+			<ons-text-input 
+			    type="datetime-local"
+				ng-model="entry.StartTime"
+				placeholder="start">
+			</ons-text-input>
+		</div>			
+		<div>
+			<ons-text-area 
+              ng-model="entry.Notes" 
+              placeholder="notes">
+            </ons-text-area>
+		</div>
+		<div>
+			<ons-text-input
+				ng-model="entry.Location.Name"
+				placeholder="location">
+			</ons-text-input>
+		</div>
+		<div>
+			<ons-button ng-click="save()">
+				Save
+			</ons-button>
+		</div>	
+</ons-page>

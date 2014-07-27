@@ -1,0 +1,150 @@
+@font-face {
+  font-family: Kaushan Script;
+  src: url("fonts/KaushanScript-Regular.ttf"); /* TTF file for CSS3 browsers */
+}
+
+/* base */
+* {margin: 0; padding: 0;}
+
+ul {
+  list-style-type: none;
+}
+
+.rightArrow:before {
+   font-family: FontAwesome;
+   content: "\f105";
+   float: right;
+}
+
+.left {
+  float: left;
+}
+
+/* table */
+.table {
+  display: table;
+}
+.row {
+  display: table-row;
+}
+.column {
+  display: table-cell;
+}
+
+/* list */
+.list-item {
+	position: relative;
+}
+
+.list-item-top, .list-item-bottom  {
+	position: relative;
+}
+
+.list-item-top {		
+	z-index: 1;
+	background-color: green;
+	top:0px;
+}
+
+.list-item-bottom {
+	z-index: 0;
+	background-color: red;
+	top: -20px;
+}
+
+.ios-list-item {
+
+}
+
+/* trips */
+.polaroid {
+  position: relative;
+  width: 98%; /*220px;*/
+  margin-left: auto; /* center */
+  margin-right: auto;
+}
+ 
+.polaroid img {
+  max-width: 100%; /* auto scale */
+  border: 10px solid #fff;
+  border-bottom: 45px solid #fff;
+  -webkit-box-shadow: 3px 3px 3px #777;
+     -moz-box-shadow: 3px 3px 3px #777;
+          box-shadow: 3px 3px 3px #777;
+}
+ 
+.polaroid p {
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  bottom: 30px;
+  font: 400 18px/1 'Kaushan Script', cursive;
+  color: #888;
+}
+
+/* plans */
+.plan {
+
+}
+
+.planDay {
+  float: left;  
+  
+}
+
+.planName {
+  float: left;  
+  text-align: left;
+  margin-left: 10px;
+}
+
+/* activities */
+.activityTime {
+  float: left;
+}
+
+.activityDetails {
+  text-align: left;
+  margin-left: 70px;
+}
+
+.activityNotes {
+
+}
+
+.activityImages ul{
+  margin-left: 0px;
+}
+
+.activityImages img {
+  max-width: 90%;
+}
+
+/* journal */
+.journalEntryHeader {
+  background-color: white;
+  padding: 5px;
+  border-top: 1px solid #DDDDDD;
+}
+
+.journalEntryActivities {
+  background-color: white;  
+}
+
+.journalEntryTime {
+  padding: 5px;
+}
+
+.journalEntryImageCaption {
+  vertical-align: middle;
+}
+
+.smallThumb {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    margin: 5px;
+    /*border: 3px solid #c99;*/
+    background-position: center center;
+    background-size: cover;
+}

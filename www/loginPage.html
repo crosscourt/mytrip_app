@@ -1,0 +1,26 @@
+<ons-page class="center">
+    <ons-navigator-toolbar title="Login"  right-button-icon="fa fa-lg fa-angle-right"
+                           on-right-button-click="ons.navigator.pushPage('page2.html')">
+    </ons-navigator-toolbar>
+	<div ng-controller="LoginCtrl">
+	{{menuName}}
+		<div>
+			<ons-text-input 
+				ng-model="username"
+				placeholder="username">
+			</ons-text-input>
+		</div>
+		<div>
+			<ons-text-input 
+				type="password"
+				ng-model="password"
+				placeholder="password">
+			</ons-text-input>
+		</div>
+		<div>
+			<ons-button ng-click="login()">
+				Login
+			</ons-button>
+		</div>	
+	</div>
+</ons-page>

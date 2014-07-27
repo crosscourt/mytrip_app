@@ -1,0 +1,36 @@
+<ons-page class="center">
+    <ons-navigator-toolbar title="Trip" right-button-icon="fa fa-lg fa-save"
+                           on-right-button-click="save()">
+    </ons-navigator-toolbar>
+	<div ng-controller="TripInputCtrl">
+		<div>
+			<ons-text-input 
+				ng-model="name"
+				placeholder="name">
+			</ons-text-input>
+		</div>
+		<div>
+			<ons-text-input 
+				ng-model="startDate"
+				placeholder="start">
+			</ons-text-input>
+		</div>
+		<div>
+			<ons-text-input 
+				ng-model="endDate"
+				placeholder="end">
+			</ons-text-input>
+		</div>
+		<div>
+			<ons-text-area 
+              ng-model="notes" 
+              placeholder="notes">
+          </ons-text-area>
+		</div>
+		<div>
+			<ons-button ng-click="save()">
+				Save
+			</ons-button>
+		</div>	
+	</div>
+</ons-page>

@@ -1,0 +1,22 @@
+<ons-page class="center" ng-controller="TripsCtrl">
+	<!--
+	<ios-list>
+		<ios-list-item ng-repeat="item in trips" item="item">
+		</ios-list-item>		
+	</ios-list>
+	-->
+	<ons-list>
+        <ons-list-item ng-repeat="trip in trips" class="topcoat-list__item__line-height"> <!--ng-click="showPlans($index)"-->
+			<slide-item on-tap="showPlans($index)">
+			aa
+			</slide-item>
+			<!--
+			<div class="polaroid">
+			  <p>{{trip.name}}</p>
+			  <img src="images/blank.png"/>
+			</div>
+			-->
+		</ons-list-item>
+    </ons-list>
+	
+</ons-page>

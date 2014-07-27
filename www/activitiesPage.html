@@ -1,0 +1,22 @@
+<ons-page class="center" ng-controller="ActivitiesCtrl">
+		
+	<ons-list>
+        <ons-list-item ng-repeat="activity in activities" class="topcoat-list__item__line-height">
+			<div class="activity">
+				<div class="activityTime">{{activity.time}}</div>
+				<div class="activityDetails">
+					<div class="activityNotes">{{activity.notes}}</div>
+					<div class="activityImages">
+						<ul>
+						  <li ng-repeat="image in activity.images">
+							<img src="images/blank.png"/>
+							<div>caption</div>
+						  </li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</ons-list-item>
+    </ons-list>
+	
+</ons-page>

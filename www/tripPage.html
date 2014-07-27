@@ -1,0 +1,35 @@
+<ons-page class="center">
+    <ons-navigator-toolbar title="Trip" 
+		left-button-icon="fa fa-bars"
+		on-left-button-click="ons.slidingMenu.toggleMenu();"
+		right-button-icon="fa fa-lg fa-pencil"
+	    on-right-button-click="edit()">
+    </ons-navigator-toolbar>
+	<div ng-controller="TripCtrl">
+		<div>
+			{{trip.name}}				
+		</div>
+		<div>
+			5 days 4 nights
+			the white villas, hidden beach, amazing food
+		</div>
+		<div>
+			<div>
+				<div>travellers</div>
+				<div>
+					<ons-button ng-click="edit()">
+					Edit
+					</ons-button>
+				</div>
+			</div>
+			<ul>
+				<li>
+					user 1
+				</li>
+				<li>
+					user 2
+				</li>
+			</ul>
+		</div>
+	</div>
+</ons-page>

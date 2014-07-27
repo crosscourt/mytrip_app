@@ -1,0 +1,35 @@
+<ons-page class="center" ng-controller="JournalCtrl">
+    <ons-navigator-toolbar right-button-icon="fa fa-lg fa-plus"
+                           on-right-button-click="addEntry()">
+    </ons-navigator-toolbar>
+	<ons-scroller infinit-scroll-enable="true" on-scrolled="fetchMore()" can-load="true" threshold='100'>
+		<ul>
+			<li ng-repeat="entry in journalEntries">
+				<div class="journalEntry">
+					<div class="journalEntryHeader">{{entry.Day | date: 'EEEE, MMM dd'}}</div>
+					<div class="journalEntryActivities">
+						<ul>
+							<li ng-repeat="activity in entry.Activities">
+								<div class="table">
+									<div class="journalEntryTime column">{{activity.StartTime | date: 'HH:mm'}}</div>
+									<div class="column">
+										<div>{{activity.Notes}}</div>
+										<ul>
+											<li ng-repeat="image in activity.Images">
+												<div class="table">
+													<!--<img class="smallThumb" src="images/{{image.Url}}" />-->
+													<div class="smallThumb column" style="background-image: url('images/{{image.ImageUrl}}');"></div>
+													<div class="journalEntryImageCaption column">{{image.Caption}}</div>
+												</div>
+											</li>
+										</ul>									
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>			  
+			</li>
+		</ul>
+	</ons-scroller>
+</ons-page>

@@ -1,0 +1,13 @@
+<ons-page class="center" ng-controller="PlansCtrl">
+		
+	<ons-list>
+        <ons-list-item ng-repeat="plan in plans" ng-click="showActivities($index)" class="topcoat-list__item__line-height">
+			<div class="plan">
+				<div class="planDay">{{plan.day}}</div>
+				<div class="planName">{{plan.name}}</div>
+				<div class="rightArrow"></div>
+			</div>
+		</ons-list-item>
+    </ons-list>
+	
+</ons-page>
