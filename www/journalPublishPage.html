@@ -1,0 +1,84 @@
+<ons-page ng-controller="JournalPublishCtrl">
+	<ons-toolbar>
+		<div class="left">
+			<ons-back-button>Back</ons-back-button>
+		</div>
+		<div class="center">Publish</div>	 
+	</ons-toolbar>
+
+	<ons-list>
+		<ons-list-item>
+		  <input type="text" ng-model="trip.Name" placeholder="Trip Name" class="text-input text-input--transparent" style="margin-top:8px; width: 100%;">
+		</ons-list-item>
+
+		<ons-list-item>
+		    <ons-row>
+				<ons-col width="90px">
+					<label style="color: #666">Start Time</label>
+				</ons-col>
+				<ons-col>
+					<div class="list-input">
+						<input class="text-input"
+							type="datetime-local"
+							ng-model="trip.StartTime"
+							placeholder="start time">
+						</input>
+					</div>
+				</ons-col>
+			</ons-row>
+		</ons-list-item>
+		
+		<ons-list-item>
+		    <ons-row>
+				<ons-col width="90px">
+					<span style="color: #666">End Time</span>
+				</ons-col>
+				<ons-col>
+					<div class="list-input">
+						<input class="text-input--transparent"
+							type="datetime-local"
+							ng-model="trip.EndTime"
+							placeholder="end time">
+						</input>
+					</div>
+				</ons-col>
+			</ons-row>
+		</ons-list-item>
+		
+		<ons-list-item>
+		    <ons-row>
+				<ons-col width="90px">
+					<span style="color: #666">Privacy</span>
+				</ons-col>
+				<ons-col>
+					<div class="list-input">
+						<select class="select-transparent" style="width: 200px" ng-model="trip.Privacy">
+						  <option value="public">Public</option>
+						  <option value="friends">Friends</option>
+						  <option value="private">Private</option>				  
+						</select>
+					</div>
+				</ons-col>
+			</ons-row>
+		</ons-list-item>
+		
+		<ons-list-item>
+		    <ons-row>
+				<ons-col width="180px">
+					<ons-button modifier="quiet" ng-click="toggleFbShare()">
+						<ons-icon icon="facebook-square" style="color: blue"></ons-icon> Facebook
+					</ons-button>
+				</ons-col>
+			</ons-row>
+		</ons-list-item>
+		
+	</ons-list>
+	
+	<div class="content-padded">
+		<ons-button modifier="large" ng-click="publish()">
+			Publish
+		</ons-button>
+	</div>
+
+
+</ons-page>

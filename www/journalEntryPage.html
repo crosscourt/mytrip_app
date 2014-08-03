@@ -1,31 +1,70 @@
 <ons-page class="center" ng-controller="JournalEntryCtrl">
-    <ons-navigator-toolbar title="New Entry" right-button-icon="fa fa-lg fa-save"
-                           on-right-button-click="save()">
-    </ons-navigator-toolbar>
-	<div>
+	<ons-toolbar>
+		<div class="left">
+			<ons-back-button>Back</ons-back-button>
+		</div>
+	  <div class="center">Journal Entry</div>
+	    <div class="right">
+			<ons-toolbar-button ng-click="save()">
+			  <ons-icon icon="save">
+			</ons-toolbar-button>
+		</div>
+	</ons-toolbar>
+	<div class="table centerDiv">
 		<!--<input type="datetime-local" value="1996-12-19T16:39:57"/>-->
-		<div>
-			<ons-text-input 
-			    type="datetime-local"
-				ng-model="entry.StartTime"
-				placeholder="start">
-			</ons-text-input>
+		<div class="inputRow">
+			<div class="column label">
+				Location
+			</div>
+			<div class="column">
+				<input class="text-input"
+					ng-model="entry.Location.Name"
+					placeholder="location">
+				</input>
+			</div>			
+		</div>
+		<div class="inputRow">
+			<div class="column label">
+				Time
+			</div>
+			<div class="column">
+				<input class="text-input"
+					type="datetime-local"
+					ng-model="entry.StartTime"
+					placeholder="start">
+				</input>
+			</div>
 		</div>			
-		<div>
-			<ons-text-area 
-              ng-model="entry.Notes" 
-              placeholder="notes">
-            </ons-text-area>
-		</div>
-		<div>
-			<ons-text-input
-				ng-model="entry.Location.Name"
-				placeholder="location">
-			</ons-text-input>
-		</div>
-		<div>
+		<div class="inputRow">
+			<div class="column label">
+				Notes
+			</div>
+			<div class="column">
+				<textarea class="textarea"
+				  ng-model="entry.Notes" 
+				  placeholder="notes">
+				</textarea>
+			</div>
+		</div>		
+		<div class="center">
 			<ons-button ng-click="save()">
 				Save
 			</ons-button>
-		</div>	
+		</div>
+		<div>
+			<ul>
+				<li ng-repeat="image in entry.Images">
+					<div class="table centerDiv">
+						<div class="smallThumb column" back-img="{{image.ImageUrl}}" ></div>
+						<div class="journalEntryImageCaption column">
+							<input class="text-input"
+								ng-model="image.Caption"
+								placeholder="caption">
+							</input>
+						</div>
+					</div>
+				</li>
+			</ul>	
+		</div>
+	</div>
 </ons-page>
