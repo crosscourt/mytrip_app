@@ -1,4 +1,4 @@
-angular.module('myApp').controller('JournalEntryCtrl', function ($scope, $filter, $q, JournalService, FoursquareService) {
+angular.module('myApp').config(window.$QDecorator).controller('JournalEntryCtrl', function ($scope, $filter, $q, JournalService, FoursquareService) {
 		
 	$scope.name = "save";
 	
@@ -39,13 +39,19 @@ angular.module('myApp').controller('JournalEntryCtrl', function ($scope, $filter
 				])
 				.then(
 					$q.spread(function(fileEntry, directory){
-								if (fileEntry != null) {
-									return copyFile(fileEntry, directory);
-								}
-								else {
-									return imageUri;
-								}
-							})
+						//function(data) {
+							//var fileEntry = data[0];
+							//var directory = data[1];
+							if (fileEntry != null) {
+								return copyFile(fileEntry, directory);
+							}
+							else {
+								return imageUri;
+							}
+						}),
+					function(err) {
+						console.log(err);
+					}
 				);
 	}
 
