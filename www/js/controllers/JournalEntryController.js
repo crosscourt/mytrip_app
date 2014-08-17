@@ -14,45 +14,92 @@ angular.module('myApp').config(window.$QDecorator).controller('JournalEntryCtrl'
 	
 	// probably need a callback to update this entry when the imageData returns
 	// $filter('date')(imageData.DateTimeOriginal, 'medium')
-	$scope.entry = { StartTime: imageData.DateTimeOriginal, Notes: "asd", Location: place, Images: [{ImageUrl: imageUri, Caption: ""}] };
+	$scope.entry = { StartTime: imageData.DateTimeOriginal, Notes: "", Location: place, Images: [{ImageUrl: imageUri, Caption: ""}] };
 	
-	$scope.save = function() {
+	$scope.save = function(isValid) {
+		
+		if (!isValid) {
+			return;
+		}
+		
+		// for chrome testing
+		//checkQuotaForChrome().then(requestQuotaForChrome).then(function(grantedBytes){			
+		//});
 		
 		// save the image to local disk
 		copyImageFileToAppFolder(imageUri).then(
 			function(fileUrl) {
-				alert(fileUrl);
+				$scope.entry.Images[0].ImageUrl = fileUrl;
+				var added = JournalService.addEntry($scope.entry);
+				if (added) {
+					$scope.ons.navigator.popPage();
+				}
 			});
-
-		// save entry to db
-		//var added = JournalService.addEntry($scope.entry);
-		//if (added) {
-		//	$scope.ons.navigator.popPage();
-		//}
-		
 	};
+	
+	function checkQuotaForChrome()
+	{
+		var deferred = $q.defer();
+		
+		if (navigator.webkitPersistentStorage) {
+			navigator.webkitPersistentStorage.queryUsageAndQuota( 
+				function(quota) { 
+					deferred.resolve(quota);
+				}, function(err){
+					deferred.reject(err);
+				});
+		}
+		else {
+			deferred.resolve(1000); // fake a quota
+		}
+		
+		return deferred.promise;
+	}
+	
+	function requestQuotaForChrome(currentQuota)
+	{
+		var deferred = $q.defer();
+		
+		var quota = 1024*1024;
+		
+		if (currentQuota == 0) {
+			navigator.webkitPersistentStorage.requestQuota(quota, 
+				function(grantedBytes) { 
+					deferred.resolve(grantedBytes);
+				}, function(err){
+					deferred.reject(err);
+				});
+		}
+		else {
+			deferred.resolve(quota); //
+		}
+		
+		return deferred.promise;
+	}
 
 	function copyImageFileToAppFolder(imageUri){
-		return $q.all([ 
+		var deferred = $q.defer();
+		$q.all([ 
 					getLocalFile(imageUri),
 					getFileSystem().then(getDirectory)
 				])
 				.then(
 					$q.spread(function(fileEntry, directory){
-						//function(data) {
-							//var fileEntry = data[0];
-							//var directory = data[1];
-							if (fileEntry != null) {
-								return copyFile(fileEntry, directory);
+							if (fileEntry != null && directory != null && typeof(fileEntry) == 'FileEntry') {
+								var destUrl = copyFile(fileEntry, directory);
+								deferred.resolve(destUrl);
 							}
 							else {
-								return imageUri;
+								deferred.resolve(imageUri);
 							}
 						}),
 					function(err) {
 						console.log(err);
+						return imageUri;
 					}
 				);
+				
+		return deferred.promise;
 	}
 
 	function getLocalFile(imageUri) {
@@ -77,7 +124,7 @@ angular.module('myApp').config(window.$QDecorator).controller('JournalEntryCtrl'
 	function getFileSystem() { 
 		var deferred = $q.defer();
 
-		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, 
+		window.requestFileSystem(LocalFileSystem.PERSISTENT, 1024*1024, 
 			function(fileSys) {      
 		    	deferred.resolve(fileSys);
 			}, function(err){

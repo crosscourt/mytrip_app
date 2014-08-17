@@ -13,8 +13,8 @@ angular.module('myApp').service('JournalService', function ($q) {
 				
 				// AUTOINCREMENT - lifetime uniqueness
 				_db.transaction(function (tx) {
-				  tx.executeSql('CREATE TABLE IF NOT EXISTS Activities (Id INTEGER PRIMARY KEY AUTOINCREMENT, StartTimeLocal, Notes, FoursquareLocationId, LocationName, Latitude, Longitude, CreatedTime INTEGER)');  
-				  tx.executeSql('CREATE TABLE IF NOT EXISTS ActivityImages (Id INTEGER PRIMARY KEY AUTOINCREMENT, ActivityId INTEGER REFERENCES Activity(id), ImageUrl, CloudinaryUrl, Caption)');  
+				  tx.executeSql('CREATE TABLE IF NOT EXISTS Activities (Id INTEGER PRIMARY KEY AUTOINCREMENT, StartTimeLocal, TimezoneOffset, Notes, FoursquareLocationId, LocationName, Latitude, Longitude, Status INTEGER, CreatedTime INTEGER)');  
+				  tx.executeSql('CREATE TABLE IF NOT EXISTS ActivityImages (Id INTEGER PRIMARY KEY AUTOINCREMENT, ActivityId INTEGER REFERENCES Activity(id), ImageUrl, CloudinaryUrl, Caption, Status INTEGER)');  
 				});
 			}
 		}
@@ -59,7 +59,7 @@ angular.module('myApp').service('JournalService', function ($q) {
 		var startTimeUTC = startTime.toISOString(); // toISO at the time this is called, not relative to the location of the photo?
 		
 		_db.transaction(function (tx) {
-		  tx.executeSql('INSERT INTO Activities (Id, StartTime, Notes, FoursquareLocationId, LocationName, Latitude, Longitude) VALUES (?, ?, ?, ?, ?, ?, ?)', [null, startTimeUTC, entry.Notes, entry.Location.Id, entry.Location.Name, 1, 2]);
+		  tx.executeSql('INSERT INTO Activities (Id, StartTimeLocal, Notes, FoursquareLocationId, LocationName, Latitude, Longitude) VALUES (?, ?, ?, ?, ?, ?, ?)', [null, startTimeUTC, entry.Notes, entry.Location.Id, entry.Location.Name, 1, 2]);
 		  //tx.executeSql("INSERT INTO Activities (Id, Notes, Latitude, Longitude) VALUES (?, ?, ?, ?)", [null, entry.Notes, 1, 2]);
 		  if (entry.Images && entry.Images.length > 0) {
 			tx.executeSql('INSERT INTO ActivityImages (Id, ActivityId, ImageUrl, Caption) VALUES (null, last_insert_rowid(), ?, ?)', [entry.Images[0].ImageUrl, entry.Images[0].Caption]);

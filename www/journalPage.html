@@ -18,16 +18,16 @@
 					<div class="journalEntryActivities">
 						<ul>
 							<li ng-repeat="activity in entry.Activities">
-								<div class="table">
+								<div class="myTable">
 									<div class="journalEntryTime column">{{activity.StartTime | date: 'HH:mm'}}</div>
-									<div class="column">
+									<div class="myColumn">
 										<div>{{activity.Notes}}</div>
 										<ul>
 											<li ng-repeat="image in activity.Images">
-												<div class="table">
+												<div class="myTable">
 													<!--<img class="smallThumb" src="images/{{image.Url}}" />-->
-													<div class="smallThumb column" style="background-image: url('images/{{image.ImageUrl}}');"></div>
-													<div class="journalEntryImageCaption column">{{image.Caption}}</div>
+													<div class="smallThumb myColumn" style="background-image: url('{{image.ImageUrl}}');"></div>
+													<div class="journalEntryImageCaption myColumn">{{image.Caption}}</div>
 												</div>
 											</li>
 										</ul>									
