@@ -20,7 +20,6 @@
 				</ons-col>
 				<ons-col>
 					<div class="list-input">
-						<!--<input type="datetime-local" value="1996-12-19T16:39:57"/>-->
 						<input class="text-input"
 							ng-model="entry.Location.Name"
 							placeholder="location">
@@ -36,10 +35,12 @@
 				</ons-col>
 				<ons-col>
 					<div class="list-input">
-						<input class="text-input"
+						<!--<input class="text-input"
 							type="datetime-local"
 							ng-model="entry.StartTime"
-							placeholder="start" required>
+							placeholder="start" required>-->
+							<span ng-click="showPicker()">{{entry.DisplayStartTime}}</span>
+							
 						</input>
 					</div>
 				</ons-col>

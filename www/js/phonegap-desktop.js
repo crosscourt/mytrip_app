@@ -1354,4 +1354,16 @@ cordova.plugins.ImageUtility = {
 		var json = '{ "\{GPS\}": { "Longitude": "123", "Latitude": "98" } }';
 		callback(json);
 	}
-}
+};
+
+navigator.globalization = {
+	dateToString: function(date, success, error) {
+		success( { value: "8/18/2014, 10:39pm" });
+	}
+};
+
+window.plugins.datePicker = { 
+	show: function (options, callback) {
+		callback(new Date());
+	}
+};

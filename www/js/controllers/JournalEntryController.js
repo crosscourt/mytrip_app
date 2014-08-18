@@ -7,15 +7,35 @@ angular.module('myApp').config(window.$QDecorator).controller('JournalEntryCtrl'
 	//var imageUri = "http://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Orion_Nebula_-_Hubble_2006_mosaic_18000.jpg/600px-Orion_Nebula_-_Hubble_2006_mosaic_18000.jpg";
 	//"file:///users/anthony/dev/mytrip_app/www/images/Penguins.jpg"
 
-	var imageData = { DateTimeOriginal: Date.now(), Latitude: 112, Longitude: 90 };
+	var imageData = { DateTimeOriginal: new Date(), Latitude: 112, Longitude: 90 };
 	
 	//
 	var place = FoursquareService.searchPlaces(imageData.Latitude, imageData.Longitude, 1);
 	
 	// probably need a callback to update this entry when the imageData returns
 	// $filter('date')(imageData.DateTimeOriginal, 'medium')
-	$scope.entry = { StartTime: imageData.DateTimeOriginal, Notes: "", Location: place, Images: [{ImageUrl: imageUri, Caption: ""}] };
+	$scope.entry = { StartTime: imageData.DateTimeOriginal, DisplayStartTime: '', Notes: '', Location: place, Images: [{ImageUrl: imageUri, Caption: ''}] };
 	
+	getDisplayDate($scope.entry.StartTime).then(function(displayString){
+		$scope.entry.DisplayStartTime = displayString;
+	});
+
+	$scope.showPicker = function() {
+
+		var options = {
+		  date: $scope.entry.StartTime,
+		  mode: 'datetime'
+		};
+
+		window.plugins.datePicker.show(options, function(date){
+			$scope.entry.StartTime = date;
+			
+			getDisplayDate($scope.entry.StartTime).then(function(displayString){
+				$scope.entry.DisplayStartTime = displayString;
+			});
+		});
+	}
+
 	$scope.save = function(isValid) {
 		
 		if (!isValid) {
@@ -36,9 +56,26 @@ angular.module('myApp').config(window.$QDecorator).controller('JournalEntryCtrl'
 				}
 			});
 	};
+
+	function getDisplayDate(date) {
+		var deferred = $q.defer();
+
+		navigator.globalization.dateToString(
+		  	date,
+		  	function (dateResult) {
+		  		alert(dateResult.value);
+		  	  	deferred.resolve(dateResult.value);
+		  	},
+		  	function () {
+		  	  	deferred.reject('Error getting dateString');
+		  	},
+		  	{formatLength:'short', selector:'date and time'}
+		);
+
+		return deferred.promise;
+	}
 	
-	function checkQuotaForChrome()
-	{
+	function checkQuotaForChrome() {
 		var deferred = $q.defer();
 		
 		if (navigator.webkitPersistentStorage) {
@@ -56,8 +93,7 @@ angular.module('myApp').config(window.$QDecorator).controller('JournalEntryCtrl'
 		return deferred.promise;
 	}
 	
-	function requestQuotaForChrome(currentQuota)
-	{
+	function requestQuotaForChrome(currentQuota) {
 		var deferred = $q.defer();
 		
 		var quota = 1024*1024;

@@ -49,6 +49,14 @@
                         {
                             "xml": "<feature name=\"ActionSheet\"><param name=\"ios-package\" value=\"ActionSheet\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"DatePicker\"><param name=\"ios-package\" value=\"DatePicker\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Globalization\"><param name=\"ios-package\" value=\"CDVGlobalization\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -60,6 +68,12 @@
             "PACKAGE_NAME": "SoftwareMonks.MyTrip"
         },
         "nl.x-services.plugins.actionsheet": {
+            "PACKAGE_NAME": "SoftwareMonks.MyTrip"
+        },
+        "com.plugin.datepicker": {
+            "PACKAGE_NAME": "SoftwareMonks.MyTrip"
+        },
+        "org.apache.cordova.globalization": {
             "PACKAGE_NAME": "SoftwareMonks.MyTrip"
         }
     },

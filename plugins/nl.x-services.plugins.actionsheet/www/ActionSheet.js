@@ -9,7 +9,7 @@ ActionSheet.install = function () {
   if (!window.plugins) {
     window.plugins = {};
   }
-alert('added');
+
   window.plugins.actionsheet = new ActionSheet();
   return window.plugins.actionsheet;
 };
