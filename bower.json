@@ -1,0 +1,9 @@
+{
+  "name": "app-name",
+  "version": "0.0.1",
+  "dependencies": {
+    "cloudinary_js": ">=1.0.17",
+    "cloudinary_ng": ">=0.1.0"
+  },
+  "private": true
+}

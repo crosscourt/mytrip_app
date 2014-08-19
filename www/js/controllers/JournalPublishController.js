@@ -1,4 +1,4 @@
-angular.module('myApp').controller('JournalPublishCtrl', function ($scope, $filter, JournalService) {
+angular.module('myApp').controller('JournalPublishCtrl', function ($scope, $filter, JournalService, CloudinaryService) {
 		
 	// $filter('date')(imageData.DateTimeOriginal, 'medium')
 	$scope.trip = { Name: "", StartTime: new Date(), StartTimeDisplay: "", EndTime: new Date(), EndTimeDisplay: "", Privacy: "friends" };
@@ -12,6 +12,8 @@ angular.module('myApp').controller('JournalPublishCtrl', function ($scope, $filt
 	});
 	
 	$scope.publish = function() {
+				
+
 				
 		if (true) {
 			$scope.ons.navigator.popPage();

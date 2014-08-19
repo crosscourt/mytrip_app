@@ -1,0 +1,21 @@
+{
+  "name": "cloudinary_ng",
+  "description": "A set of AngularJS directives/helpers for using Cloudinary with AngularJS",
+  "version": "0.1.1",
+  "homepage": "https://github.com/cloudinary/cloudinary_agular",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "angular": "1.2.x",
+    "cloudinary_js": ">=1.0.17"
+  },
+  "_release": "0.1.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.1.1",
+    "commit": "74b708690333e1d402dc39d593d881a1e45d5b49"
+  },
+  "_source": "git://github.com/cloudinary/cloudinary_angular.git",
+  "_target": ">=0.1.0",
+  "_originalSource": "cloudinary_ng"
+}
