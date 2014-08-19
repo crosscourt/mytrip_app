@@ -34,11 +34,9 @@
   },
   "camera":{
     "pictures_url":[
-      "http://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Orion_Nebula_-_Hubble_2006_mosaic_18000.jpg/600px-Orion_Nebula_-_Hubble_2006_mosaic_18000.jpg",
-      "http://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Chicago_sunrise_1.jpg/800px-Chicago_sunrise_1.jpg",
-      "http://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Diatomaceous_Earth_BrightField.jpg/300px-Diatomaceous_Earth_BrightField.jpg",
-      "http://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Sunset_2007-1.jpg/800px-Sunset_2007-1.jpg",
-      "http://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/GD_Kennedy_SLV_AllanGreen.jpg/800px-GD_Kennedy_SLV_AllanGreen.jpg"
+	  "images/Penguins.jpg",
+	  "images/girl.png",
+	  "images/luffy.png"
     ],
     "pictures_base64_png":[
       "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAwUExURQAm///YAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAt4U8AAAAJcEhZcwAADsIAAA7CARUoSoAAAAAVSURBVBjTY2AAAkEgYKCQQQ0zgAAAMp8EQTkXHrEAAAAASUVORK5CYII=",

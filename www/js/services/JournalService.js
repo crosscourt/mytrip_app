@@ -12,8 +12,10 @@ angular.module('myApp').service('JournalService', function ($q) {
 				_db = window.openDatabase('mytripdb', '1.0', 'trips database', 2 * 1024 * 1024);
 				
 				// AUTOINCREMENT - lifetime uniqueness
+				// no point storing local+utc/timezone because we don't know when and where the user will add the entry
+				// better to use the location to determine timezone if its set 
 				_db.transaction(function (tx) {
-				  tx.executeSql('CREATE TABLE IF NOT EXISTS Activities (Id INTEGER PRIMARY KEY AUTOINCREMENT, StartTimeLocal, TimezoneOffset, Notes, FoursquareLocationId, LocationName, Latitude, Longitude, Status INTEGER, CreatedTime INTEGER)');  
+				  tx.executeSql('CREATE TABLE IF NOT EXISTS Activities (Id INTEGER PRIMARY KEY AUTOINCREMENT, StartTime, Notes, FoursquareLocationId, LocationName, Latitude, Longitude, Status INTEGER, CreatedTime INTEGER)');  
 				  tx.executeSql('CREATE TABLE IF NOT EXISTS ActivityImages (Id INTEGER PRIMARY KEY AUTOINCREMENT, ActivityId INTEGER REFERENCES Activity(id), ImageUrl, CloudinaryUrl, Caption, Status INTEGER)');  
 				});
 			}
@@ -54,12 +56,12 @@ angular.module('myApp').service('JournalService', function ($q) {
 	addEntry: function(entry){
 		// pick top matching location, user can edit later
 		// var location = { Id: '1', Name: "somewhere"};
-		var startTime = new Date(Date.parse(entry.StartTime)); // the html input-data-local returns a string
-		var startTimeLocal = "";
-		var startTimeUTC = startTime.toISOString(); // toISO at the time this is called, not relative to the location of the photo?
+		
+		var startTimeLocal = entry.StartTime.toYYYYMMDDHHMM();
+		//var startTimeUTC = entry.StartTime.toISOString(); // toISO at the time this is called, not relative to the location of the photo?
 		
 		_db.transaction(function (tx) {
-		  tx.executeSql('INSERT INTO Activities (Id, StartTimeLocal, Notes, FoursquareLocationId, LocationName, Latitude, Longitude) VALUES (?, ?, ?, ?, ?, ?, ?)', [null, startTimeUTC, entry.Notes, entry.Location.Id, entry.Location.Name, 1, 2]);
+		  tx.executeSql('INSERT INTO Activities (Id, StartTime, Notes, FoursquareLocationId, LocationName, Latitude, Longitude) VALUES (?, ?, ?, ?, ?, ?, ?)', [null, startTimeLocal, entry.Notes, entry.Location.Id, entry.Location.Name, 1, 2]);
 		  //tx.executeSql("INSERT INTO Activities (Id, Notes, Latitude, Longitude) VALUES (?, ?, ?, ?)", [null, entry.Notes, 1, 2]);
 		  if (entry.Images && entry.Images.length > 0) {
 			tx.executeSql('INSERT INTO ActivityImages (Id, ActivityId, ImageUrl, Caption) VALUES (null, last_insert_rowid(), ?, ?)', [entry.Images[0].ImageUrl, entry.Images[0].Caption]);
@@ -73,7 +75,7 @@ angular.module('myApp').service('JournalService', function ($q) {
 			//alert('success');
 		});
 		
-		return true;
+		return true; // this returns true before the sql has executed
 	},
 	
 	publish: function(trip) {
@@ -94,16 +96,18 @@ angular.module('myApp').service('JournalService', function ($q) {
 			var len = results.rows.length;
 			//var activities = [];
 			var prevDate;
-			var days = [];
-			var day;
+			var prevLocation;
+			var activityGroups = [];
+			var group;
 			var i = 0;
 			while(i<len){
 				var item = results.rows.item(i);
-				var currentDate = new Date(Date.parse(item.StartTime)); // grouping needs to be done using local time
+				var currentDate = Date.fromYYYYMMDDHHMM(item.StartTime); //new Date(Date.parse(item.StartTime)); // grouping needs to be done using local time
+				var currentLocation = item.LocationName;
 				
-				if (prevDate == null || !currentDate.sameDay(prevDate)) {
-					day = { Day: currentDate, Activities: [] };
-					days.push(day);
+				if (!currentDate.sameDay(prevDate) && prevLocation != currentLocation) {
+					group = { Date: currentDate, Location: currentLocation, Activities: [] };
+					activityGroups.push(group);
 				}
 				
 				var activity = {
@@ -114,7 +118,7 @@ angular.module('myApp').service('JournalService', function ($q) {
 					LocationName: item.LocationName,
 					Images: []
 				};
-				day.Activities.push(activity);
+				group.Activities.push(activity);
 				
 				// add the images to activity
 				while (i<len){
@@ -131,9 +135,10 @@ angular.module('myApp').service('JournalService', function ($q) {
 				}
 				
 				prevDate = currentDate;
+				prevLocation = currentLocation;
 			}
 			
-			success(days);
+			success(activityGroups);
 		}, 
 		function(err) {
 			console.log("Error processing SQL: "+err.code);

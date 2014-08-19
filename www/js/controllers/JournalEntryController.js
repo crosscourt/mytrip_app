@@ -14,14 +14,13 @@ angular.module('myApp').config(window.$QDecorator).controller('JournalEntryCtrl'
 	
 	// probably need a callback to update this entry when the imageData returns
 	// $filter('date')(imageData.DateTimeOriginal, 'medium')
-	$scope.entry = { StartTime: imageData.DateTimeOriginal, DisplayStartTime: '', Notes: '', Location: place, Images: [{ImageUrl: imageUri, Caption: ''}] };
+	$scope.entry = { StartTime: imageData.DateTimeOriginal, StartTimeDisplay: '', Notes: '', Location: place, Images: [{ImageUrl: imageUri, Caption: ''}] };
 	
-	getDisplayDate($scope.entry.StartTime).then(function(displayString){
-		$scope.entry.DisplayStartTime = displayString;
+	$scope.entry.StartTime.getDisplayDateTime(function(displayString){
+		$scope.entry.StartTimeDisplay = displayString;
 	});
 
 	$scope.showPicker = function() {
-
 		var options = {
 		  date: $scope.entry.StartTime,
 		  mode: 'datetime'
@@ -30,8 +29,8 @@ angular.module('myApp').config(window.$QDecorator).controller('JournalEntryCtrl'
 		window.plugins.datePicker.show(options, function(date){
 			$scope.entry.StartTime = date;
 			
-			getDisplayDate($scope.entry.StartTime).then(function(displayString){
-				$scope.entry.DisplayStartTime = displayString;
+			$scope.entry.StartTime.getDisplayDateTime(function(displayString){
+				$scope.entry.StartTimeDisplay = displayString;
 			});
 		});
 	}
@@ -63,8 +62,7 @@ angular.module('myApp').config(window.$QDecorator).controller('JournalEntryCtrl'
 		navigator.globalization.dateToString(
 		  	date,
 		  	function (dateResult) {
-		  		alert(dateResult.value);
-		  	  	deferred.resolve(dateResult.value);
+		  		deferred.resolve(dateResult.value);
 		  	},
 		  	function () {
 		  	  	deferred.reject('Error getting dateString');
@@ -142,7 +140,8 @@ angular.module('myApp').config(window.$QDecorator).controller('JournalEntryCtrl'
 		var deferred = $q.defer();
 
 		// for debugging, if http url, then no need to find on the filesystem
-		if (imageUri.lastIndexOf("http", 0) === 0) {
+		if (imageUri.lastIndexOf("http", 0) === 0 ||
+			imageUri.lastIndexOf("images", 0) === 0) {
 			deferred.resolve(imageUri);
 		}
 		else {
