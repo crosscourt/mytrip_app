@@ -162,7 +162,7 @@ angular.module('myApp').service('CloudinaryService', function () {
         console.log("Sent = " + r.bytesSent);
       },
       function(error) {
-        alert("An error has occurred: Code = " = error.code);
+        alert("An error has occurred: Code = " + error.code);
       }, 
       uploadOptions);
 
@@ -206,7 +206,7 @@ angular.module('myApp').service('CloudinaryService', function () {
   }
 
   var api_call_fail = function(error) {
-      alert("An error has occurred: Code = " = error.code);
+      alert("An error has occurred: Code = " + error.code);
   }
 
   var upload2 = function(file) {

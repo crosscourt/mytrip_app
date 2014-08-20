@@ -1,12 +1,16 @@
 angular.module('myApp').controller('JournalCtrl', function ($scope, JournalService) {
 
+	$scope.journalItems = [];
+
 	$scope.loadData = function () {
-		JournalService.getEntries().then(function(data){
+		JournalService.getEntries().then(function(activities){
+			
+			var activityGroups = groupEntriesByDateAndLocation(activities);
 			
 			// wrap the entry in an item 
 			var items = [];
-			for (var i=0; i<data.length; i++) {
-				var item = { Entry: data[i], IsStart: false, IsEnd: false };
+			for (var i=0; i<activityGroups.length; i++) {
+				var item = { Entry: activityGroups[i], IsStart: false, IsEnd: false };
 				items.push(item);
 			}
 			
@@ -14,6 +18,31 @@ angular.module('myApp').controller('JournalCtrl', function ($scope, JournalServi
 		});
 	}
 
+	function groupEntriesByDateAndLocation(activities) {
+		var prevDate;
+		var prevLocation;
+		var activityGroups = [];
+		var group;
+		var i = 0;
+		
+		while(i<activities.length){
+			var activity = activities[i];
+			var currentDate = Date.fromYYYYMMDDHHMM(activity.StartTime); //new Date(Date.parse(item.StartTime)); // grouping needs to be done using local time
+			var currentLocation = activity.LocationName;
+			
+			if (!currentDate.sameDay(prevDate) && prevLocation != currentLocation) {
+				group = { Date: currentDate, Location: currentLocation, Activities: [] };
+				activityGroups.push(group);
+			}
+			
+			group.Activities.push(activity);			
+			i++
+		}
+		
+		return 	activityGroups;
+	}
+	
+	
 	$scope.loadData();
 
 	$scope.fetchMore = function() {

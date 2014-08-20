@@ -3,6 +3,9 @@ angular.module('myApp').controller('JournalPublishCtrl', function ($scope, $filt
 	// $filter('date')(imageData.DateTimeOriginal, 'medium')
 	$scope.trip = { Name: "", StartTime: new Date(), StartTimeDisplay: "", EndTime: new Date(), EndTimeDisplay: "", Privacy: "friends" };
 	
+	var startTime = $scope.ons.navigator.getCurrentPage().options.start;
+	var endTime = $scope.ons.navigator.getCurrentPage().options.end;
+
 	$scope.trip.StartTime.getDisplayDateTime(function(displayString){
 		$scope.trip.StartTimeDisplay = displayString;
 	});
@@ -12,9 +15,20 @@ angular.module('myApp').controller('JournalPublishCtrl', function ($scope, $filt
 	});
 	
 	$scope.publish = function() {
-				
+		
+		// perform validations? check if locations are set
 
-				
+		var activities = JournalService.getEntriesBetweenDates(startTime, endTime);
+
+		// call server to create trip
+
+		// update activities with trip id or mark as uploaded
+
+		// upload images or mark them as ready for upload
+		CloudinaryService.uploadImage(activities[0].images[0].ImageUrl, function(result){
+			alert(result);
+		});
+
 		if (true) {
 			$scope.ons.navigator.popPage();
 		}
