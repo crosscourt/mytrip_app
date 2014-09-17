@@ -21,13 +21,13 @@ ul {
 }
 
 /* table */
-.table {
+.myTable {
   display: table;
 }
-.row {
+.myRow {
   display: table-row;
 }
-.column {
+.myColumn {
   display: table-cell;
 }
 
@@ -121,10 +121,13 @@ ul {
 }
 
 /* journal */
+.journalEntryItem {
+  border-top: 1px solid #DDDDDD
+}
+
 .journalEntryHeader {
   background-color: white;
-  padding: 5px;
-  border-top: 1px solid #DDDDDD;
+  padding: 5px;  
 }
 
 .journalEntryActivities {

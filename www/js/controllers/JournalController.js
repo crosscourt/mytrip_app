@@ -7,14 +7,17 @@ angular.module('myApp').controller('JournalCtrl', function ($scope, JournalServi
 			
 			var activityGroups = groupEntriesByDateAndLocation(activities);
 			
-			// wrap the entry in an item 
-			var items = [];
-			for (var i=0; i<activityGroups.length; i++) {
-				var item = { Entry: activityGroups[i], IsStart: false, IsEnd: false };
-				items.push(item);
+			// add extra view properties 
+			for (var i=0; i<activityGroups.length; i++) {				
+				var group = activityGroups[i]; //{ Entry: activityGroups[i], IsStart: false, IsEnd: false };			
+				for (var j=0; j<group.Activities.length; j++) {
+					var activity = group.Activities[j];
+					activity.IsStart = j == 0 ? true :false;
+					activity.IsEnd = j == 1 ? true: false;
+				}				
 			}
 			
-			$scope.journalItems = items;
+			$scope.journalItems = activityGroups;
 		});
 	}
 
@@ -27,7 +30,7 @@ angular.module('myApp').controller('JournalCtrl', function ($scope, JournalServi
 		
 		while(i<activities.length){
 			var activity = activities[i];
-			var currentDate = Date.fromYYYYMMDDHHMM(activity.StartTime); //new Date(Date.parse(item.StartTime)); // grouping needs to be done using local time
+			var currentDate = activity.StartTime; //new Date(Date.parse(item.StartTime)); // grouping needs to be done using local time
 			var currentLocation = activity.LocationName;
 			
 			if (!currentDate.sameDay(prevDate) && prevLocation != currentLocation) {
@@ -36,6 +39,9 @@ angular.module('myApp').controller('JournalCtrl', function ($scope, JournalServi
 			}
 			
 			group.Activities.push(activity);			
+			
+			prevDate = currentDate;
+			prevLocation = currentLocation;
 			i++
 		}
 		
@@ -51,18 +57,18 @@ angular.module('myApp').controller('JournalCtrl', function ($scope, JournalServi
 	
 	$scope.canShare = function() {
 		// have set start and end, start is before end
-		var startIndex = getStartEntryIndex();
-		var endIndex = getEndEntryIndex();
+		var startActivity = getEntryByProperty('IsStart');
+		var endActivity = getEntryByProperty('IsEnd');
 		
-		if (startIndex != -1 && endIndex != -1 && startIndex <= endIndex) {
+		if (startActivity != null && endActivity != null && startActivity.StartTime <= endActivity.StartTime) {
 			return true;
 		}
 		
 		return false;
 	};
 	
-	$scope.moreActions = function(index) {
-		$scope.currentEntryIndex = index;
+	$scope.moreActions = function(id) {
+		$scope.currentEntryId = id;
 	
 		var options = {
 	        'buttonLabels': ['Set Trip Start', 'Set Trip End'],
@@ -83,14 +89,11 @@ angular.module('myApp').controller('JournalCtrl', function ($scope, JournalServi
 	};
 	
 	$scope.publish = function() {
-		var startIndex = getStartEntryIndex();
-		var endIndex = getEndEntryIndex();
+		var startActivity = getEntryByProperty('IsStart');
+		var endActivity = getEntryByProperty('IsEnd');
 		
-		if (startIndex != -1 && endIndex != -1) {
-			var startEntryDate = $scope.journalItems[startIndex].StartTime;
-			var endEntryDate = $scope.journalItems[endIndex].StartTime;
-			
-			$scope.ons.navigator.pushPage('journalPublishPage.html', { start: startEntryDate, end: endEntryDate });
+		if (startActivity != null && endActivity != null) {
+			$scope.ons.navigator.pushPage('journalPublishPage.html', { start: startActivity.StartTime, end: endActivity.StartTime });
 		}
 		
 	};
@@ -105,17 +108,13 @@ angular.module('myApp').controller('JournalCtrl', function ($scope, JournalServi
 	}
 	
 	function setTripStart() {
-		clearStart();
-	
-		var item = $scope.journalItems[$scope.currentEntryIndex];
-		item.IsStart = true;
+		clearAllByProperty("IsStart");	
+		setEntryByProperty("IsStart", $scope.currentEntryId);
 	}
 	
 	function setTripEnd() {		
-		clearEnd();
-	
-		var item = $scope.journalItems[$scope.currentEntryIndex];
-		item.IsEnd = true;
+		clearAllByProperty("IsEnd");
+		setEntryByProperty("IsEnd", $scope.currentEntryId);
 	}
 	
 	var photoActionCallback = function (buttonIndex) {
@@ -150,82 +149,54 @@ angular.module('myApp').controller('JournalCtrl', function ($scope, JournalServi
 			console.log("unable to get EXIF from " + imageUri);
 		});
 		*/
-		$scope.ons.navigator.on('postpop', function(event) {
+		myNavigator.on('postpop', function(event) {
 			var page = event.currentPage; // Get current page object
 			if (true) {
 			  $scope.loadData();
 			}
 		});
   
-		$scope.ons.navigator.pushPage('journalEntryPage.html', {selectedImage: imageUri});
+		//$scope.ons.navigator.pushPage('journalEntryPage.html', {selectedImage: imageUri});
+		myNavigator.pushPage('journalEntryPage.html', {selectedImage: imageUri});
     }
 
     function getPhotoFail(message) {
       alert('Failed because: ' + message);
     }
-	/*
-	function getEntryIndexByStatus(status) {
-		var index = -1;
+	
+	function getEntryByProperty(key) {		
 		for (var i=0; i<$scope.journalItems.length; i++) {
-			var item = $scope.journalItems[i];
-			if (item.Status == status) {
-				index = i;
-				break;
+			var group = $scope.journalItems[i];
+			for (var j=0; j<group.Activities.length; j++) {
+				if (group.Activities[j][key]) {
+					return group.Activities[j];
+				}
 			}
 		}
 		
-		return index;
+		return null;
 	}
 	
-	function clearAllStatus(status) {
+	function setEntryByProperty(key, id) {
 		for (var i=0; i<$scope.journalItems.length; i++) {
-			var item = $scope.journalItems[i];
-			if (item.Status == status) {
-				item.Status = '';
-			}
-		}
-	}
-	*/
-	function getStartEntryIndex(status) {
-		var index = -1;
-		for (var i=0; i<$scope.journalItems.length; i++) {
-			var item = $scope.journalItems[i];
-			if (item.IsStart) {
-				index = i;
-				break;
+			var group = $scope.journalItems[i];
+			for (var j=0; j<group.Activities.length; j++) {
+				if (group.Activities[j].Id == id) {
+					group.Activities[j][key] = true;
+				}
 			}
 		}
 		
-		return index;
+		return null;
 	}
 	
-	function getEndEntryIndex(status) {
-		var index = -1;
+	function clearAllByProperty(key) {
 		for (var i=0; i<$scope.journalItems.length; i++) {
-			var item = $scope.journalItems[i];
-			if (item.IsEnd) {
-				index = i;
-				break;
-			}
-		}
-		
-		return index;
-	}
-	
-	function clearStart() {
-		for (var i=0; i<$scope.journalItems.length; i++) {
-			var item = $scope.journalItems[i];
-			if (item.IsStart) {
-				item.IsStart = false;
-			}
-		}
-	}
-	
-	function clearEnd() {
-		for (var i=0; i<$scope.journalItems.length; i++) {
-			var item = $scope.journalItems[i];
-			if (item.IsEnd) {
-				item.IsEnd = false;
+			var group = $scope.journalItems[i];
+			for (var j=0; j<group.Activities.length; j++) {
+				if (group.Activities[j][key]) {
+					group.Activities[j][key] = false;
+				}
 			}
 		}
 	}

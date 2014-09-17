@@ -5,17 +5,24 @@
 		</ios-list-item>		
 	</ios-list>
 	-->
-	<ons-list>
-        <ons-list-item ng-repeat="trip in trips" class="topcoat-list__item__line-height"> <!--ng-click="showPlans($index)"-->
+	
+	<ons-list slide-item-group>
+        <ons-list-item  ng-repeat="trip in trips" class="topcoat-list__item__line-height"> <!--ng-click="showPlans($index)"-->
 			<slide-item on-tap="showPlans($index)">
-			aa
-			</slide-item>
-			<!--
-			<div class="polaroid">
-			  <p>{{trip.name}}</p>
-			  <img src="images/blank.png"/>
-			</div>
-			-->
+				<div class="swipe-item-top">
+					content gets inserting here
+					<br/>
+					abc
+				</div>
+				<div class="swipe-item-bottom">
+					<div class="swipe-item-menu" ng-click="more()">
+						More
+					</div>
+					<div class="swipe-item-menu" style="background-color: red; color: white">
+						Delete
+					</div>
+				</div>
+			</slide-item>			
 		</ons-list-item>
     </ons-list>
 	

@@ -1,87 +1,62 @@
-<ons-page ng-controller="JournalCtrl">
-	<ons-toolbar>		
-	  <div class="center">Journal</div>
-	    <div class="right">
-			<ons-toolbar-button ng-click="addEntry()">
-			  <ons-icon icon="plus">
-			</ons-toolbar-button>
-			<ons-toolbar-button ng-click="publish()" ng-show="canShare()">
-			  <ons-icon icon="share-alt">
-			</ons-toolbar-button>
-		</div>
-	</ons-toolbar>
-	<ons-scroller infinit-scroll-enable="true" on-scrolled="fetchMore()" can-load="true" threshold='100'>
-		<ul slide-item-group>
-			<li class="journalEntryItem" ng-repeat="item in journalItems">
-				<slide-item on-tap="showPlans($index)">
-					<div class="swipe-item-top">
-						<div class="journalEntry">
-							<div class="journalEntryHeader">
-								<span style="font-weight:bold; color:red;" ng-show="item.IsStart">Start</span>
-								<span style="font-weight:bold; color:red;" ng-show="item.IsEnd">End</span>
-								{{item.Entry.Location}} {{item.Entry.Date | date: 'EEEE, MMM dd'}}</div>
-							<div class="journalEntryActivities">
-								<ul>
-									<li ng-repeat="activity in item.Entry.Activities">
-										<div class="myTable">
-											<div class="journalEntryTime column">{{activity.StartTime | date: 'HH:mm'}}</div>
-											<div class="myColumn">
-												<div>{{activity.Notes}}</div>
-												<ul>
-													<li ng-repeat="image in activity.Images">
-														<div class="myTable">
-															<!--<img class="smallThumb" src="images/{{image.Url}}" />-->
-															<div class="smallThumb myColumn" style="background-image: url('{{image.ImageUrl}}');"></div>
-															<div class="journalEntryImageCaption myColumn">{{image.Caption}}</div>
-														</div>
-													</li>
-												</ul>									
+<ons-navigator var="myNavigator">
+	<ons-page ng-controller="JournalCtrl">
+		<ons-toolbar>		
+		  <div class="center">Journal</div>
+			<div class="right">
+				<ons-toolbar-button ng-click="addEntry()">
+				  <ons-icon icon="plus">
+				</ons-toolbar-button>
+				<ons-toolbar-button ng-click="publish()" ng-show="canShare()">
+				  <ons-icon icon="share-alt">
+				</ons-toolbar-button>
+			</div>
+		</ons-toolbar>
+		<ons-scroller infinit-scroll-enable="true" on-scrolled="fetchMore()" can-load="true" threshold='100'>
+			<ul slide-item-group>
+				<li class="journalEntryItem" ng-repeat="item in journalItems">
+					<div class="journalEntry">
+						<div class="journalEntryHeader">						
+							{{item.Location}} {{item.Date | date: 'EEEE, MMM dd'}}</div>
+						<div class="journalEntryActivities">
+							<ul>
+								<li ng-repeat="activity in item.Activities">
+									<slide-item on-tap="showPlans($index)">
+										<div class="swipe-item-top">
+											<div class="myTable">
+												<div class="journalEntryTime column">
+													<div style="font-weight:bold; color:red;" ng-show="activity.IsStart">Start</div>
+													<div style="font-weight:bold; color:red;" ng-show="activity.IsEnd">End</div>
+													{{activity.StartTime | date: 'HH:mm'}}
+												</div>
+												<div class="myColumn">
+													<div>{{activity.Notes}}</div>
+													<ul>
+														<li ng-repeat="image in activity.Images">
+															<div class="myTable">
+																<!--<img class="smallThumb" src="images/{{image.Url}}" />-->
+																<div class="smallThumb myColumn" style="background-image: url('{{image.ImageUrl}}');"></div>
+																<div class="journalEntryImageCaption myColumn">{{image.Caption}}</div>
+															</div>
+														</li>
+													</ul>									
+												</div>
 											</div>
 										</div>
-									</li>
-								</ul>
-							</div>
+										<div class="swipe-item-bottom">
+											<div class="swipe-item-menu" ng-click="moreActions({{activity.Id}})">
+												More
+											</div>
+											<div class="swipe-item-menu" style="background-color: red; color: white">
+												Delete
+											</div>
+										</div>
+									</slide-item>
+								</li>
+							</ul>
 						</div>
-					</div>
-					<div class="swipe-item-bottom">
-						<div class="swipe-item-menu" ng-click="moreActions($index)">
-							More
-						</div>
-						<div class="swipe-item-menu" style="background-color: red; color: white">
-							Delete
-						</div>
-					</div>
-				</slide-item>	
-			</li>
-		</ul>
-		<!--
-		<ul>
-			<li ng-repeat="entry in journalEntries">
-				<div class="journalEntry">
-					<div class="journalEntryHeader">{{entry.Day | date: 'EEEE, MMM dd'}}</div>
-					<div class="journalEntryActivities">
-						<ul>
-							<li ng-repeat="activity in entry.Activities">
-								<div class="myTable">
-									<div class="journalEntryTime column">{{activity.StartTime | date: 'HH:mm'}}</div>
-									<div class="myColumn">
-										<div>{{activity.Notes}}</div>
-										<ul>
-											<li ng-repeat="image in activity.Images">
-												<div class="myTable">													
-													<div class="smallThumb myColumn" style="background-image: url('{{image.ImageUrl}}');"></div>
-													<div class="journalEntryImageCaption myColumn">{{image.Caption}}</div>
-												</div>
-											</li>
-										</ul>									
-									</div>
-								</div>
-							</li>
-						</ul>
-					</div>
-				</div>			  
-			</li>
-		</ul>
-		-->
-	</ons-scroller>
-</ons-page>
+					</div>						
+				</li>
+			</ul>			
+		</ons-scroller>
+	</ons-page>
+</ons-navigator>

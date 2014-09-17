@@ -145,7 +145,7 @@ angular.module('myApp').service('JournalService', function ($q) {
 		
 			var activity = {
 				Id: item.Id,
-				StartTime: item.StartTime,
+				StartTime: Date.fromYYYYMMDDHHMM(item.StartTime),
 				Notes: item.Notes,					
 				FoursquareLocationId: item.FoursquareLocationId,
 				LocationName: item.LocationName,
@@ -198,7 +198,7 @@ angular.module('myApp').service('JournalService', function ($q) {
 					
 					var activity = {
 						Id: item.Id,
-						StartTime: item.StartTime,
+						StartTime: currentDate,
 						Notes: item.Notes,					
 						FoursquareLocationId: item.FoursquareLocationId,
 						LocationName: item.LocationName,

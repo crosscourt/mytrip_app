@@ -1,17 +1,64 @@
 //(function() {
 //	'use strict';
 	var app = angular.module('myControls', []);
+
+	app.directive('slideItemGroup', function() {  
+		return {  
+			controller: function($scope) {  
+				this.scope = $scope; //.$parent;  // $parent because transclude created child scope?, scope of the current controller
+				this.scope.nextItemId = 0;
+				this.scope.openedItem = -1;
+				
+				this.getNextItemId = function() {
+					var id = this.scope.nextItemId++;
+					return id;
+				};
+				
+				
+			}  
+		};  
+	}); 
 	
-	app.directive('slideItem', function() {
+	app.directive('slideItem', function($timeout) {
 		return {
+			require: '^slideItemGroup', 
 			restrict: 'E',
-			replace: true,
+			//replace: true,
 			transclude: true,
 			scope: {
-				onTap: '&'
+				onTap: '&'				
 			},
 			templateUrl: 'js/directives/templates/swipe-item.html',
-			link: function(scope, element, attrs) {
+			link: function(scope, element, attrs, slideItemGroupController, transclude) {
+					
+				scope.itemId = slideItemGroupController.getNextItemId();
+				
+                // adjust sizes after rendering
+				// this doesn't work when using jquery
+				//angular.element(document).ready(function() {					
+				//});		
+				
+				var afterRender = function(){
+					var topDiv = element[0].querySelector('.swipe-item-top');
+					var menuDivs = element[0].querySelectorAll('.swipe-item-menu');
+					for(i=0; i<menuDivs.length; i++) {
+						// set the height to be the same (no auto height because of absolute positing)
+						menuDivs[i].style.height = topDiv.clientHeight + "px";
+						
+						// close the slider if a menu is clicked, so we don't need to use a service or something to detect when it needs to close
+						angular.element(menuDivs[i]).on('click', function() {
+							swiper.close();
+						});
+					}
+				};
+				$timeout(afterRender, 0);
+				
+				slideItemGroupController.scope.$watch('openedItem', function() { 					
+					if (slideItemGroupController.scope.openedItem != scope.itemId) {
+						swiper.close();
+					}
+				});
+				
 				/* the css attrs to set */
 				var BROWSER_TRANSFORMS = [
 					"webkitTransform",
@@ -24,16 +71,16 @@
 				var Swiper = Class.extend({
 					init: function(element) {
 						this.el = element[0];
-						this.itemDiv = element[0].querySelector('.swipe-item-top');
+						this.topDiv = element[0].querySelector('.swipe-item-top');
 						this.bottomDiv = element[0].querySelector('.swipe-item-bottom');
 						this.menuDivs = element[0].querySelectorAll('.swipe-item-menu');
-						this.originalX = this.itemDiv.getBoundingClientRect().left;
+						this.originalX = this.topDiv.getBoundingClientRect().left;
 						
 						this.totalMenuWidth = 0;
 						for(i=0; i<this.menuDivs.length; i++) {
 							this.totalMenuWidth += this.menuDivs[i].clientWidth; 
 							// set the height to be the same (no auto height because of absolute positing)
-							this.menuDivs[i].style.height = this.itemDiv.clientHeight + "px";
+							//this.menuDivs[i].style.height = this.topDiv.clientHeight + "px";
 						}
 						
 						this.currentX = 0;
@@ -69,8 +116,7 @@
 								if(this.isClosed()){
 									if(!this.isInsideSwipeTargetArea(ev.gesture.center.pageX)){
 										ev.gesture.stopDetect();
-									}	
-									
+									}									
 								}
 								
 								break;
@@ -93,13 +139,12 @@
 
 							case 'swipeleft':
 								if (this.canSlide()){
-								    this.slideStarted = true;
 									ev.gesture.preventDefault();
 
-									if (this.isClosed()) {
+									//if (this.isClosed()) { // need to call open() to make the topDiv bounce back to max open position
 										ev.stopPropagation();
 										this.open();
-									}
+									//}
 								}
 								break;
 
@@ -117,6 +162,7 @@
 							case 'release':
 							    ev.gesture.preventDefault();
 								
+								// if slide to more than half the width of all menus
 								if (this.currentX < this.MAX / 2) {
 									this.open();
 								} else {
@@ -131,12 +177,14 @@
 						return x < this.MAX;
 					},
 					
-					isClosed: function(){
+					isClosed: function(){						
 						return this.startX == 0;
 					},
 					
 					canSlide: function(){
-					    this.itemDiv.getBoundingClientRect().left != this.originalX;
+						//console.log(this.topDiv.getBoundingClientRect().left + " != " + this.originalX);
+					    //this.topDiv.getBoundingClientRect().left != this.originalX;
+						return true;
 					},
 
 					close: function() {
@@ -154,7 +202,10 @@
 							//this.$abovePage.addClass('transition');
 							//this.$behindPage.addClass('transition');
 							this.translate(this.MAX);
-						}
+							
+							slideItemGroupController.scope.openedItem = scope.itemId; // this == swiper
+							slideItemGroupController.scope.$apply(); // trigger change event
+						}						
 					},
 
 					toggle: function() {
@@ -171,7 +222,7 @@
 						var property;
 						for (var i = 0; i < BROWSER_TRANSFORMS.length; i++) {
 							property = BROWSER_TRANSFORMS[i];
-							this.itemDiv.style[property] = aboveTransform;							
+							this.topDiv.style[property] = aboveTransform;							
 						}
 												
 						this.currentX = x;
@@ -179,7 +230,7 @@
 				});
 
 				var swiper = new Swiper(element);
-				swiper.activateHammer();
+				swiper.activateHammer();		
 			}
 		};
 	});

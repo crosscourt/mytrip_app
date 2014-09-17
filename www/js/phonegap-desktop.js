@@ -1358,7 +1358,7 @@ cordova.plugins.ImageUtility = {
 
 navigator.globalization = {
 	dateToString: function(date, success, error) {
-		success( { value: "8/18/2014, 10:39pm" });
+		success( { value: (date.getMonth()+1) + "/" + date.getDate() + "/" + date.getFullYear() + "," + date.getHours() + ":" + date.getMinutes() + (date.getHours() < 12 ? "am" : "pm") });
 	}
 };
 
